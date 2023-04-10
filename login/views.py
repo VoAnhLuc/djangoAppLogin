@@ -10,7 +10,6 @@ from .forms_auth import UsersCreationFrom, UsersLoginFrom
 
 def login(request):
     form = UsersLoginFrom()
-    print(timezone.now())
     if request.method == 'POST':
         form = UsersLoginFrom(request.POST)
         if form.is_valid():
