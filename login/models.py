@@ -19,3 +19,9 @@ class Users(AbstractUser):
 
     def __str__(self):
         return self.email
+    def get_info(self):
+        data = {
+            'email': self.email,
+            'date_joined': self.date_joined,
+        }
+        return data

@@ -10,6 +10,7 @@
     {% endfor %}
     {% if user.is_authenticated %}
         <p>Hi! {{ email }}</p>
+        <p>Your account create {{ date_joined }}</p>
         <p>You are logged in</p>
         <p><a href="{% url 'users:logout' %}">Log Out</a></p>
     {% else %}
