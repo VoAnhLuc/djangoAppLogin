@@ -8,6 +8,7 @@
     {% for message in messages %}
         <p {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} ><b>{{message}}</b></p>
     {% endfor %}
+
     {% if user.is_authenticated %}
         <p>Hi! {{ email }}</p>
         <p>Your account create {{ date_joined }}</p>
