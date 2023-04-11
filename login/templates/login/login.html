@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends "login/base.html" %}
+{% block content %}
 
-</head>
-<body>
     <h2>Log In</h2>
     {% for message in messages %}
         <p {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} ><b>{{message}}</b></p>
@@ -13,6 +10,7 @@
       {{ form.as_p }}
         <button type="submit">Log In</button>
         <p><a href="{% url 'users:register' %}">Register Here!</a></p>
+        <p><a href="{% url 'users:dashboard' %}">Back Home</a></p>
     </form>
-</body>
-</html>
+
+{% endblock %}

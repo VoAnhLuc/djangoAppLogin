@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-</head>
-<body>
+{% extends "login/base.html" %}
+{% block content %}
     <h2>Home Page</h2>
     {% for message in messages %}
         <p {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} ><b>{{message}}</b></p>
@@ -19,5 +15,5 @@
         <a href="{% url 'users:login' %}">Log In</a>
         <p><a href="{% url 'users:register' %}">Register Here!</a></p>
     {% endif %}
-</body>
-</html>
+
+{% endblock %}

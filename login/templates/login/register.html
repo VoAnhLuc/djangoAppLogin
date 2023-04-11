@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends "login/base.html" %}
+{% block content %}
 
-</head>
-<body>
     <form action="." method="POST">
         {% csrf_token %}
         {{form.as_p}}
         <input type="submit" value="Register"/>
     </form>
     <p><a href="{% url 'users:login' %}">Have an account? Login Here!</a></p>
+    <p><a href="{% url 'users:dashboard' %}">Back Home</a></p>
 
-</body>
-</html>
+{% endblock %}
