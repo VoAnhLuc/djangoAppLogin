@@ -1,9 +1,8 @@
 from django import forms
-from .models import Image
+from .models import Category
 
-
-class ImageForm(forms.ModelForm):
+class CategoryForm(forms.ModelForm):
     """Form for the image model"""
     class Meta:
-        model = Image
-        fields = ('title', 'image')
+        model = Category
+        fields = ('category_name', 'category_image')

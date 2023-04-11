@@ -1,9 +1,10 @@
 from django.db import models
-
 # Create your models here.
-class Image(models.Model):
-    title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='images')
-
+class Category(models.Model):
+    category_name = models.CharField(max_length=200, unique=True)
+    category_image = models.ImageField(upload_to='images_category')
     def __str__(self):
-        return self.title
+        return self.category_name
+
+
+

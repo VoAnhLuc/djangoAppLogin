@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Category</h2>
+    {% if category %}
+        {% for cate in category %}
+            <div>
+                <p>{{ cate.category_name }}</p>
+                <a  href="{% url 'catalog:category' %}">
+                  <img src="{{ cate.category_image.url }}" alt="Forest" style="max-height:100px">
+                </a>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

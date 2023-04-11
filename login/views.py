@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms_auth import UsersCreationFrom, UsersLoginFrom
 from django.views import View
+from django.views.generic import CreateView
 
 # Create your views here.
 
@@ -27,7 +28,7 @@ class Login(View):
                 messages.warning(request, 'Email or Password is not incorrect')
 
         return render(request, self.template_name, {'form': form})
-class Register(View):
+class Register(CreateView):
     form_class = UsersCreationFrom
     template_name = 'login/register.html'
     def get(self, request, *args, **kwargs):
@@ -42,7 +43,7 @@ class Register(View):
             messages.success(request, 'Account was created for ' + email)
             return redirect('users:dashboard')
 
-        return render(request, 'login/register.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
 class Dashboard(View):
     template_name = 'login/dashboard.html'
