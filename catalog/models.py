@@ -6,5 +6,11 @@ class Category(models.Model):
     def __str__(self):
         return self.category_name
 
-
-
+class Product(models.Model):
+    product_name = models.CharField(max_length=200, unique=True)
+    product_image = models.ImageField(upload_to='images_product')
+    category = models.ManyToManyField(Category)
+    def __str__(self):
+        return self.product_name
+    def category_get(self):
+        return self.category

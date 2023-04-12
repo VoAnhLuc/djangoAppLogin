@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <a href="{% url 'catalog:catalog_home' %}" style="float:right">Catalog Home</a>
+
+    <h2>Create New Category</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+       {{ form.as_p }}
+      <button type="submit">Create Category</button>
+    </form>
+
+{% endblock %}

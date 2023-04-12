@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+    <a href="{% url 'catalog:catalog_home' %}" style="float:right">Catalog Home</a>
+
+    <h2>Category: {{ category.category_name }}</h2>
+
+    <a href="{% url 'catalog:update_category' category.id %}">Edit Category</a>
+
+    <p><img src="{{ category.category_image.url }}" alt="connect" style="max-height:100px"></p>
+
+    <a href="{% url 'catalog:delete_category' category.id %}">Delete Category</a>
+
+    <div style='text-align: center'>
+        <ul>
+            {% for pro in product %}
+                <li style='display: inline-block'>
+                    <a  href="{% url 'catalog:detail_product' pro.id %}">
+                        <img src="{{ pro.product_image.url }}" alt="connect" style="max-height:100px">
+                        <p>{{ pro.product_name }}</p>
+                    </a>
+
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

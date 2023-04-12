@@ -19,7 +19,18 @@ from . import views
 
 app_name = 'catalog'
 urlpatterns = [
-    path('create_category/', views.AddCategory.as_view(), name='category'),
-    path('', views.CataLogHome.as_view(), name='catalog_home')
+    path('', views.CataLogHome.as_view(), name='catalog_home'),
+
+    # Path for category
+    path('detail_category/<int:category_id>/', views.DetailCategory.as_view(), name='detail_category'),
+    path('create_category/', views.CreateCategory.as_view(), name='create_category'),
+    path('update_category/<int:category_id>/', views.UpdateCategory.as_view(), name='update_category'),
+    path('delete_category/<int:category_id>/', views.DeleteCategory.as_view(), name='delete_category'),
+
+    # Path for product
+    path('detail_product/<int:product_id>/', views.DetailProduct.as_view(), name='detail_product'),
+    path('create_product/', views.CreateProduct.as_view(), name='create_product'),
+    path('update_product/<int:product_id>/', views.UpdateProduct.as_view(), name='update_product'),
+    path('delete_product/<int:product_id>/', views.DeleteProduct.as_view(), name='delete_product'),
 
 ]

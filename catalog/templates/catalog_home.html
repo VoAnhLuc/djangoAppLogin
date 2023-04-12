@@ -1,12 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
+
     <h2>Category</h2>
+
+    {% for message in messages %}
+        <p {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} ><b>{{message}}</b></p>
+    {% endfor %}
+
+    <p><a href="{% url 'catalog:create_category' %}" style="float:right">Create New Category</a></p>
+    <br>
+    <p><a href="{% url 'catalog:create_product' %}" style="float:right">Create New Product</a></p>
+
     {% if category %}
         {% for cate in category %}
             <div>
-                <p>{{ cate.category_name }}</p>
-                <a  href="{% url 'catalog:category' %}">
-                  <img src="{{ cate.category_image.url }}" alt="Forest" style="max-height:100px">
+                <a  href="{% url 'catalog:detail_category' cate.id %}">
+                    <p>{{ cate.category_name }}</p>
+                    <img src="{{ cate.category_image.url }}" alt="connect" style="max-height:100px">
                 </a>
             </div>
         {% endfor %}

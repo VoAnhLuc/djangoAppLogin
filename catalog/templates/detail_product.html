@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    <a href="{% url 'catalog:catalog_home' %}" style="float:right">Catalog Home</a>
+
+    <h2>Product: {{ product.product_name }}</h2>
+
+    <a href="{% url 'catalog:update_product' product.id %}">Edit Product</a>
+
+    <p><img src="{{ product.product_image.url }}" alt="connect" style="max-height:200px"></p>
+
+    <a href="{% url 'catalog:delete_product' product.id %}">Delete Product</a>
+
+    <p>Product in category:</p>
+    {% for cate in category  %}
+        <li >
+            <a href="{% url 'catalog:detail_category' cate.id %}">{{ cate.category_name }}</a>
+        </li>
+    {% endfor %}
+
+{% endblock %}
