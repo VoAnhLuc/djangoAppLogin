@@ -144,7 +144,7 @@ class UpdateProduct(View):
 
         if form_edit.is_valid():
             product.product_name = form_edit.cleaned_data.get('product_name')
-            product.product_image_thumnail = form_edit.cleaned_data.get('product_image_thumnail')
+            product.product_image = form_edit.cleaned_data.get('product_image')
             product.category.set(form_edit.cleaned_data.get('category'))
 
             for_del = product.productimage_set.filter(product_id=product_id)
