@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
-from .forms import CategoryForm, ProductForm, ProductImageForm
+from .forms import CategoryForm, ProductForm
 from .models import Category, Product
 from django.views import View
 from django.contrib import messages
 from django.core.paginator import Paginator
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
 """
     Views Home
@@ -12,9 +16,14 @@ class CataLogHome(View):
     form_class = CategoryForm
     model = Category
     template_name = 'catalog_home.html'
+    # queryset = Category.objects.all()
+    # serializer_class = CategoryForm
     def get(self, request, *args, **kwargs):
         category = self.model.objects.all()
         return render(request, self.template_name, {'form': self.form_class, 'category': category})
+        # return self.list(request, *args, **kwargs)
+    # def post(self, request, *args, **kwargs):
+    #     return self.create(request, *args, **kwargs)
 
 """
     Views of Category
@@ -40,8 +49,11 @@ class DetailCategory(View):
 class CreateCategory(View):
     form_class = CategoryForm
     template_name = 'create_category.html'
+    # serializer_class = CategoryForm
+
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {'form': self.form_class})
+        # return serializer_class
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
@@ -107,12 +119,15 @@ class DetailProduct(View):
         return render(request, self.template_name, data)
 class CreateProduct(View):
     form_class = ProductForm
-    form_image = ProductImageForm
     template_name = 'create_product.html'
-    def get(self, request):
-        return render(request, self.template_name, {'form': self.form_class, 'form_image': self.form_image})
-    def post(self, request, *args, **kwargs):
 
+    # queryset = Product.objects.all()
+    # serializer_class = ProductForm
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'form': self.form_class})
+        # return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         list_image = request.FILES.getlist('images')
 
@@ -126,16 +141,15 @@ class CreateProduct(View):
             messages.success(request, 'Create product success.')
             return redirect('catalog:catalog_home')
 
-        return render(request, self.template_name, {'form': form, 'form_image': self.form_image})
+        return render(request, self.template_name, {'form': form})
 class UpdateProduct(View):
-    form_image = ProductImageForm
     form_class = ProductForm
     model = Product
     template_name = 'update_product.html'
     def get(self, request, product_id, *args, **kwargs):
         product = self.model.objects.get(id=product_id)
         form = self.form_class(instance=product)
-        return render(request, self.template_name, {'form': form, 'form_image': self.form_image})
+        return render(request, self.template_name, {'form': form})
     def post(self, request, product_id, *args, **kwargs):
         product = self.model.objects.get(id=product_id)
         form_edit = self.form_class(request.POST, request.FILES, instance=product)
@@ -158,7 +172,7 @@ class UpdateProduct(View):
             messages.success(request, 'Edit product success.')
             return redirect('catalog:detail_product', product_id=product_id)
 
-        return render(request, self.template_name, {'form': form_edit, 'form_image': self.form_image})
+        return render(request, self.template_name, {'form': form_edit})
 
 class DeleteProduct(View):
     model = Product
