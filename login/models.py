@@ -4,6 +4,7 @@ from .managers import CustomUserManager
 
 # Create your models here.
 
+
 class Users(AbstractUser):
     username = None
     email = models.EmailField(max_length=50, unique=True)
@@ -19,6 +20,7 @@ class Users(AbstractUser):
 
     def __str__(self):
         return self.email
+
     def get_info(self):
         data = {
             'email': self.email,

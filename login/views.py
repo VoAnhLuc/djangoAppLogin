@@ -8,11 +8,14 @@ from django.views.generic import CreateView
 
 # Create your views here.
 
+
 class Login(View):
     form_class = UsersLoginFrom
     template_name = 'login/login.html'
+
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {"form": self.form_class})
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
@@ -28,11 +31,15 @@ class Login(View):
                 messages.warning(request, 'Email or Password is not incorrect')
 
         return render(request, self.template_name, {'form': form})
+
+
 class Register(CreateView):
     form_class = UsersCreationFrom
     template_name = 'login/register.html'
+
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {"form": self.form_class})
+
     def post(self, request, *args, **kwargs):
         # form = UsersCreationFrom()
         # if request.method == 'POST':
@@ -45,8 +52,10 @@ class Register(CreateView):
 
         return render(request, self.template_name, {'form': form})
 
+
 class Dashboard(View):
     template_name = 'login/dashboard.html'
+
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             context = request.user.get_info()
@@ -56,7 +65,9 @@ class Dashboard(View):
             }
         return render(request, self.template_name, context)
 
+
 class LogoutUser(View):
+
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect('users:dashboard')

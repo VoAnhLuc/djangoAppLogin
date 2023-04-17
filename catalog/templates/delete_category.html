@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2>Delete Category: {{ category.category_name }}</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+        <p>Are you sure you want to delete?</p>
+        <p><a  href="{% url 'catalog:detail_category' category.id %}">No, Back detail</a></p>
+      <button type="submit">Delete Category</button>
+    </form>
+
+{% endblock %}

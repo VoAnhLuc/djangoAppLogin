@@ -1,36 +1,46 @@
 from django.shortcuts import render, redirect
-from .forms import CategoryForm, ProductForm
-from .models import Category, Product
+from .forms import CategoryForm, ProductForm, ProductFormUpdate, ProductImageForm
+from .models import Category, Product, ProductImage
 from django.views import View
 from django.contrib import messages
 from django.core.paginator import Paginator
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import generics
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
 """
     Views Home
 """
+
+
 class CataLogHome(View):
     form_class = CategoryForm
     model = Category
     template_name = 'catalog_home.html'
+
     # queryset = Category.objects.all()
     # serializer_class = CategoryForm
+
     def get(self, request, *args, **kwargs):
         category = self.model.objects.all()
-        return render(request, self.template_name, {'form': self.form_class, 'category': category})
+
+        data = {
+            'form': self.form_class,
+            'category': category,
+            'user': request.user
+        }
+        return render(request, self.template_name, data)
         # return self.list(request, *args, **kwargs)
     # def post(self, request, *args, **kwargs):
     #     return self.create(request, *args, **kwargs)
 
+
 """
     Views of Category
 """
+
+
 class DetailCategory(View):
     model = Category
     template_name = 'detail_category.html'
+
     def get(self, request, category_id):
         category_search = self.model.objects.get(pk=category_id)
 
@@ -46,6 +56,8 @@ class DetailCategory(View):
             'page_obj': page_obj,
         }
         return render(request, self.template_name, data)
+
+
 class CreateCategory(View):
     form_class = CategoryForm
     template_name = 'create_category.html'
@@ -54,6 +66,7 @@ class CreateCategory(View):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {'form': self.form_class})
         # return serializer_class
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
@@ -62,14 +75,18 @@ class CreateCategory(View):
             return redirect('catalog:catalog_home')
 
         return render(request, self.template_name, {'form': form})
+
+
 class UpdateCategory(View):
     form_class = CategoryForm
     model = Category
     template_name = 'update_category.html'
+
     def get(self, request, category_id, *args, **kwargs):
         category = self.model.objects.get(id=category_id)
         form = self.form_class(instance=category)
         return render(request, self.template_name, {'form': form})
+
     def post(self, request, category_id, *args, **kwargs):
         category = self.model.objects.get(id=category_id)
 
@@ -85,9 +102,16 @@ class UpdateCategory(View):
 
         return render(request, self.template_name, {'form': form_edit})
 
+
 class DeleteCategory(View):
     model = Category
+    template_name = 'delete_category.html'
+
     def get(self, request, category_id, *args, **kwargs):
+        category = self.model.objects.get(id=category_id)
+        return render(request, self.template_name, {'category': category})
+
+    def post(self, request, category_id, *args, **kwargs):
         category = self.model.objects.get(id=category_id)
 
         selected_product = category.product_set.filter(category=category_id)
@@ -101,12 +125,16 @@ class DeleteCategory(View):
             messages.success(request, 'Delete Success Category: {}'.format(category))
             return redirect('catalog:catalog_home')
 
+
 """
     Views of Product
 """
+
+
 class DetailProduct(View):
     model = Product
     template_name = 'detail_product.html'
+
     def get(self, request, product_id):
         product_search = self.model.objects.get(pk=product_id)
         category = product_search.category.all()
@@ -117,68 +145,105 @@ class DetailProduct(View):
             'images': images,
         }
         return render(request, self.template_name, data)
+
+
 class CreateProduct(View):
     form_class = ProductForm
     template_name = 'create_product.html'
-
     # queryset = Product.objects.all()
     # serializer_class = ProductForm
+
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {'form': self.form_class})
-        # return self.list(request, *args, **kwargs)
+        data = {
+            'form': self.form_class,
+        }
+        return render(request, self.template_name, data)
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         list_image = request.FILES.getlist('images')
 
         if form.is_valid():
+            form.instance.create_by = request.user
             form.save()
             product = form.instance
 
             for image in list_image:
                 product.productimage_set.create(images=image)
-
-            messages.success(request, 'Create product success.')
+            messages.success(request, 'Create product {} success.'.format(product.product_name))
             return redirect('catalog:catalog_home')
 
         return render(request, self.template_name, {'form': form})
+
+
 class UpdateProduct(View):
-    form_class = ProductForm
+    form_class = ProductFormUpdate
     model = Product
     template_name = 'update_product.html'
+
     def get(self, request, product_id, *args, **kwargs):
         product = self.model.objects.get(id=product_id)
+
+        images = product.productimage_set.filter(product_id=product_id)
+
         form = self.form_class(instance=product)
+        form.instance.images = images
         return render(request, self.template_name, {'form': form})
+
     def post(self, request, product_id, *args, **kwargs):
         product = self.model.objects.get(id=product_id)
         form_edit = self.form_class(request.POST, request.FILES, instance=product)
 
-        list_image = request.FILES.getlist('images')
-
         if form_edit.is_valid():
-            product.product_name = form_edit.cleaned_data.get('product_name')
-            product.product_image = form_edit.cleaned_data.get('product_image')
-            product.category.set(form_edit.cleaned_data.get('category'))
-
-            for_del = product.productimage_set.filter(product_id=product_id)
-            for_del.delete()
-
-            for image in list_image:
-                product.productimage_set.create(images=image)
-
-            product.save()
-
+            form_edit.save()
             messages.success(request, 'Edit product success.')
             return redirect('catalog:detail_product', product_id=product_id)
 
         return render(request, self.template_name, {'form': form_edit})
 
+
 class DeleteProduct(View):
     model = Product
+    template_name = 'delete_product.html'
+
     def get(self, request, product_id, *args, **kwargs):
         product = self.model.objects.get(id=product_id)
+        return render(request, self.template_name, {'product': product})
 
+    def post(self, request, product_id, *args, **kwargs):
+        product = self.model.objects.get(id=product_id)
         product.delete()
         messages.success(request, 'Delete Success Product: {}'.format(product))
         return redirect('catalog:catalog_home')
+
+
+"""
+    Views of Image product
+"""
+
+
+class AddProductImage(View):
+    model = Product
+    template_name = 'add_product_image.html'
+    form_class = ProductImageForm
+
+    def get(self, request, product_id, *args, **kwargs):
+        product = self.model.objects.get(id=product_id)
+        return render(request, self.template_name, {'form': self.form_class, 'product': product})
+
+    def post(self, request, product_id, *args, **kwargs):
+        product = self.model.objects.get(id=product_id)
+
+        list_image = request.FILES.getlist('images')
+        for image in list_image:
+            product.productimage_set.create(images=image)
+
+        messages.success(request, 'Add New Image for Product Success')
+        return redirect('catalog:detail_product', product_id=product.id)
+
+
+def delete_image(self, image_id, *args, **kwargs):
+    image = ProductImage.objects.get(id=image_id)
+    product = image.product
+    image.delete()
+    return redirect('catalog:detail_product', product_id=product.id)

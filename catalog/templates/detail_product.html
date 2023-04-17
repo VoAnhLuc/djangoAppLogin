@@ -8,17 +8,22 @@
 
     <h2>Product: {{ product.product_name }}</h2>
 
+    <h3>Create By: {{ product.create_by }}</h3>
+
     <a href="{% url 'catalog:update_product' product.id %}">Edit Product</a>
 
     <p><img src="{{ product.product_image.url }}" alt="connect" style="max-height:200px"></p>
 
-    <a href="{% url 'catalog:delete_product' product.id %}">Delete Product</a>
+    <a  href="{% url 'catalog:delete_product' product.id %}" value="Delete Product">Delete Product</a>
 
     <div style='text-align: center'>
             <ul>
+                <p><a href="{% url 'catalog:add_product_image' product.id %}">Add Image</a></p>
+
                 {% for image in images %}
                     <li style='display: inline-block'>
                         <img src="{{ image.images.url }}" alt="connect" style="max-height:100px">
+                        <p><a href="{% url 'catalog:delete_image' image.id %}">Delete</a></p>
                     </li>
                 {% endfor %}
             </ul>
