@@ -59,14 +59,41 @@ Serializer For Product
 """
 
 
+class SupImageProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = apps.get_model('catalog.ProductImage')
+        fields = ('id', 'image')
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    ProductModel = apps.get_model('catalog.Product')
+    ProductImageModel = apps.get_model('catalog.ProductImage')
+
+    images = SupImageProductSerializer(many=True, read_only=True)
+    upload_images = serializers.ListField(
+        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
+        write_only=True,
+        required=False
+    )
+
     class Meta:
         model = apps.get_model('catalog.Product')
-        fields = ('id', 'product_name', 'product_image', 'category', 'create_by')
+        fields = ('id', 'product_name', 'product_image', 'category', 'create_by', 'images', 'upload_images')
+
 
 class UpdateProductSerializer(serializers.ModelSerializer):
     product_image = serializers.ImageField(required=False)
+    images = SupImageProductSerializer(many=True, read_only=True)
 
     class Meta:
         model = apps.get_model('catalog.Product')
-        fields = ('id', 'product_name', 'product_image', 'category', 'create_by')
+        fields = ('id', 'product_name', 'product_image', 'category', 'create_by', 'images')
+
+
+class AddImageProductSerializer(serializers.Serializer):
+    images = serializers.ListField(
+        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
+        write_only=True,
+        required=False
+    )
+

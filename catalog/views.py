@@ -138,7 +138,8 @@ class DetailProduct(View):
     def get(self, request, product_id):
         product_search = self.model.objects.get(pk=product_id)
         category = product_search.category.all()
-        images = product_search.productimage_set.filter(product_id=product_id)
+        images = ProductImage.objects.filter(product_id=product_id)
+        print(product_search.image)
         data = {
             'product': product_search,
             'category': category,
@@ -150,8 +151,6 @@ class DetailProduct(View):
 class CreateProduct(View):
     form_class = ProductForm
     template_name = 'create_product.html'
-    # queryset = Product.objects.all()
-    # serializer_class = ProductForm
 
     def get(self, request, *args, **kwargs):
         data = {
@@ -161,15 +160,16 @@ class CreateProduct(View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
-        list_image = request.FILES.getlist('images')
+        list_image = request.FILES.getlist('image')
 
         if form.is_valid():
+
             form.instance.create_by = request.user
             form.save()
             product = form.instance
 
             for image in list_image:
-                product.productimage_set.create(images=image)
+                ProductImage.objects.create(product=product, image=image)
             messages.success(request, 'Create product {} success.'.format(product.product_name))
             return redirect('catalog:catalog_home')
 
@@ -236,7 +236,7 @@ class AddProductImage(View):
 
         list_image = request.FILES.getlist('images')
         for image in list_image:
-            product.productimage_set.create(images=image)
+            ProductImage.objects.create(product_id=product_id, image=image)
 
         messages.success(request, 'Add New Image for Product Success')
         return redirect('catalog:detail_product', product_id=product.id)

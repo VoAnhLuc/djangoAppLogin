@@ -22,7 +22,7 @@
 
                 {% for image in images %}
                     <li style='display: inline-block'>
-                        <img src="{{ image.images.url }}" alt="connect" style="max-height:100px">
+                        <img src="{{ image.image.url }}" alt="connect" style="max-height:100px">
                         <p><a href="{% url 'catalog:delete_image' image.id %}">Delete</a></p>
                     </li>
                 {% endfor %}

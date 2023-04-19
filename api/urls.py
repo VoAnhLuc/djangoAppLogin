@@ -15,9 +15,14 @@ urlpatterns = [
          name='detail_category'),
 
     # Path for product
-    path('product/', views.ListCreateProduct.as_view(), name='list_create_product'),
+    path('product/', views.ListProduct.as_view(), name='list_create_product'),
     path('product/detail/<int:product_id>', views.DetailProduct.as_view(),
          name='detail_product'),
-    path('product/<int:product_id>/images', views.ImageProduct.as_view(),
+
+    path('product/detail/<int:product_id>/images', views.ImageProduct.as_view(),
          name='images_product'),
+    path('product/detail/<int:product_id>/images/<int:image_id>', views.DeleteImageProduct.as_view(),
+         name='images_product'),
+
+
 ]

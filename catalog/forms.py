@@ -11,11 +11,11 @@ class CategoryForm(forms.ModelForm):
 
 class ProductForm(forms.ModelForm):
     """Form for the product model"""
-    images = forms.ImageField(widget=forms.FileInput(attrs={'multiple': True}))
+    image = forms.ImageField(widget=forms.FileInput(attrs={'multiple': True}))
 
     class Meta:
         model = Product
-        fields = ('product_name', 'product_image', 'category',)
+        fields = ('product_name', 'product_image', 'category')
         widgets = {
             'category': forms.CheckboxSelectMultiple,
         }
