@@ -184,10 +184,10 @@ class UpdateProduct(View):
     def get(self, request, product_id, *args, **kwargs):
         product = self.model.objects.get(id=product_id)
 
-        images = product.productimage_set.filter(product_id=product_id)
+        # images = product.productimage_set.filter(product_id=product_id)
 
         form = self.form_class(instance=product)
-        form.instance.images = images
+        # form.instance.images = images
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, product_id, *args, **kwargs):

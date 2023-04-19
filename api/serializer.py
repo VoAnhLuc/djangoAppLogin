@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.apps import apps
 
-
 """
 Serializer For User
 """
@@ -13,7 +12,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model('login.Users')
         fields = ['email', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True,
+                                     'required': True,
+                                     'help_text': 'Leave empty if no change needed',
+                                     'style': {'input_type': 'password', 'placeholder': 'Password'}}}
 
     def create(self, validated_data):
         user = self.UserModel.objects.create_user(
@@ -33,8 +35,38 @@ class UsersLoginSerializer(serializers.Serializer):
     )
 
 
-class CategoryForm(serializers.ModelSerializer):
-    """Form for the category model"""
+"""
+Serializer For Category
+"""
+
+
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model('catalog.Category')
         fields = ('category_name', 'category_image')
+
+
+class UpdateCategorySerializer(serializers.ModelSerializer):
+    category_image = serializers.ImageField(required=False)
+
+    class Meta:
+        model = apps.get_model('catalog.Category')
+        fields = ('category_name', 'category_image')
+
+
+"""
+Serializer For Product
+"""
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = apps.get_model('catalog.Product')
+        fields = ('id', 'product_name', 'product_image', 'category', 'create_by')
+
+class UpdateProductSerializer(serializers.ModelSerializer):
+    product_image = serializers.ImageField(required=False)
+
+    class Meta:
+        model = apps.get_model('catalog.Product')
+        fields = ('id', 'product_name', 'product_image', 'category', 'create_by')
