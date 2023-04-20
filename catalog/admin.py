@@ -5,12 +5,12 @@ from .forms import ProductForm, CategoryForm
 # Register your models here.
 
 
-# class ProductImageAdmin(admin.ModelAdmin):
-#     model = ProductImage
-#     list_display = ('images', 'product')
-#
-#
-# admin.site.register(ProductImage, ProductImageAdmin)
+class ProductImageAdmin(admin.ModelAdmin):
+    model = ProductImage
+    list_display = ('image', 'product')
+
+
+admin.site.register(ProductImage, ProductImageAdmin)
 
 
 class SupProAdmin(admin.StackedInline):

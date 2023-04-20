@@ -93,10 +93,7 @@ class UpdateCategory(View):
         form_edit = self.form_class(request.POST, request.FILES, instance=category)
 
         if form_edit.is_valid():
-            category.category_name = form_edit.cleaned_data.get('category_name')
-            category.category_image = form_edit.cleaned_data.get('category_image')
-            category.save()
-
+            form_edit.save()
             messages.success(request, 'Edit category {} success.'.format(category.category_name))
             return redirect('catalog:detail_category', category_id=category_id)
 
@@ -139,7 +136,6 @@ class DetailProduct(View):
         product_search = self.model.objects.get(pk=product_id)
         category = product_search.category.all()
         images = ProductImage.objects.filter(product_id=product_id)
-        print(product_search.image)
         data = {
             'product': product_search,
             'category': category,

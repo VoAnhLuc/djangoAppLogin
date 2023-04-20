@@ -43,7 +43,7 @@ Serializer For Category
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model('catalog.Category')
-        fields = ('category_name', 'category_image')
+        fields = ('id', 'category_name', 'category_image')
 
 
 class UpdateCategorySerializer(serializers.ModelSerializer):
