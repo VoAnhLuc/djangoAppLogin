@@ -75,6 +75,7 @@ class ProductSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
+    create_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = apps.get_model('catalog.Product')
@@ -84,6 +85,8 @@ class ProductSerializer(serializers.ModelSerializer):
 class UpdateProductSerializer(serializers.ModelSerializer):
     product_image = serializers.ImageField(required=False)
     images = SupImageProductSerializer(many=True, read_only=True)
+
+    create_by = serializers.CharField(read_only=True)
 
     class Meta:
         model = apps.get_model('catalog.Product')
@@ -96,4 +99,3 @@ class AddImageProductSerializer(serializers.Serializer):
         write_only=True,
         required=False
     )
-
