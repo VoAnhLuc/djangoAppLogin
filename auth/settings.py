@@ -38,9 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework_simplejwt',
     'rest_framework',
     'drf_yasg',
+    'django_celery_results',
+    'celery',
+
     'login',
     'catalog',
     'api',
@@ -147,14 +151,16 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.MultiPartParser',
-        'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.FormParser'
-    ]
 }
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'voanhluc258@gmail.com'
+EMAIL_HOST_PASSWORD = 'qwkbdekoxutzxggi'

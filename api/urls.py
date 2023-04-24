@@ -24,5 +24,6 @@ urlpatterns = [
     path('product/detail/<int:product_id>/images/<int:image_id>', views.DeleteImageProduct.as_view(),
          name='images_product'),
 
+    # path('test/', views.TestCelery.as_view(), name='test'),
 
 ]
