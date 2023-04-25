@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from django.apps import apps
+
+from django.dispatch import receiver
+from .signals import user_signed_up
 """
 Serializer For User
 """
@@ -21,6 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
         )
+        user_signed_up.send(sender=self.__class__, email=user.email)
         return user
 
 
