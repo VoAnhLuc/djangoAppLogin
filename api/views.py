@@ -14,6 +14,8 @@ from .serializer import (UserSerializer, UsersLoginSerializer,
 from django.apps import apps
 from drf_yasg.utils import swagger_auto_schema
 from .tasks import hello
+
+
 """
 API for User
 """
@@ -205,7 +207,7 @@ class DetailProduct(generics.GenericAPIView):
     def delete(self, request, product_id, *args, **kwargs):
         product = self.ProductModel.objects.get(id=product_id)
         product.delete()
-        data = {'message': 'Delete Category Success'}
+        data = {'message': 'Delete Product Success'}
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
 

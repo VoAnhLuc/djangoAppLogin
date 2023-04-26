@@ -20,7 +20,7 @@ def hello():
 @shared_task
 def send_confirmation_email(email):
     subject = 'Confirm Your Email'
-    message = f'Hi, please confirm your email by clicking on this link: {settings.FRONTEND_BASE_URL}/confirm-email/{email}'
+    message = f'Hi, please confirm your email by clicking on this link: {settings.FRONTEND_BASE_URL}/confirm_email/{email}'
     from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [email]
     send_mail(subject, message, from_email, recipient_list)

@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.apps import apps
 
-from django.dispatch import receiver
 from .signals import user_signed_up
 """
 Serializer For User
