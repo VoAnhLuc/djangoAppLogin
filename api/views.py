@@ -266,4 +266,3 @@ class TestCelery(views.APIView):
         a = hello.delay()
         data = {'message': a.get()}
         return Response(data, status=status.HTTP_202_ACCEPTED)
-
