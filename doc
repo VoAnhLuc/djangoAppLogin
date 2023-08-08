@@ -1,0 +1,3 @@
+run server: py manage.py runserver
+run celery: celery -A auth worker -l info -P gevent
+run celery beat (periodic tasks): celery -A auth beat
