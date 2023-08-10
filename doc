@@ -1,4 +1,7 @@
 run server: py manage.py runserver
 run celery: celery -A auth worker -l info -P gevent
 run celery beat (periodic tasks): celery -A auth beat
+(test pull request merge 10/08/2023)
+(test rebase before merge 10/08/2023)
 (test pull resquest merge 10/08/2023)
+(test rebase 2 before merge 10/08/2023)
